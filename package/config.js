@@ -19,7 +19,7 @@ const app = safeLoad(readFileSync(configPath), 'utf8')[railsEnv]
 if (isArray(app.extensions) && app.extensions.length) delete defaults.extensions
 
 const config = deepMerge(defaults, app)
-config.outputPath = resolve('public', config.public_output_path)
+config.outputPath = resolve(config.public_root_path, config.public_output_path)
 
 let publicPath = `/${config.public_output_path}/`
 // Add prefix to publicPath.
