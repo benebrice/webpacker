@@ -40,7 +40,7 @@ class Webpacker::Configuration
   end
 
   def public_path
-    root_path.join("public")
+    root_path.join(fetch(:public_root_path))
   end
 
   def public_output_path

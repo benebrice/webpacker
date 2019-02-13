@@ -11,8 +11,8 @@ module Webpacker::Helper
   #   # In production mode:
   #   <%= asset_pack_path 'calendar.css' %> # => "/packs/calendar-1016838bab065ae1e122.css"
   def asset_pack_path(name, **options)
-    unless stylesheet?(name) && Webpacker.dev_server.running? && Webpacker.dev_server.hot_module_replacing?
-      asset_path(Webpacker.manifest.lookup!(name), **options)
+    unless stylesheet?(name) && current_webpacker_instance.class.dev_server.running? && current_webpacker_instance.class.dev_server.hot_module_replacing?
+      asset_path(current_webpacker_instance.class.manifest.lookup!(name), **options)
     end
   end
 
@@ -28,8 +28,8 @@ module Webpacker::Helper
   #   # In production mode:
   #   <%= asset_pack_url 'calendar.css' %> # => "http://example.com/packs/calendar-1016838bab065ae1e122.css"
   def asset_pack_url(name, **options)
-    unless Webpacker.dev_server.running? && Webpacker.dev_server.hot_module_replacing?
-      asset_url(Webpacker.manifest.lookup!(name), **options)
+    unless current_webpacker_instance.class.dev_server.running? && current_webpacker_instance.class.dev_server.hot_module_replacing?
+      asset_url(current_webpacker_instance.class.manifest.lookup!(name), **options)
     end
   end
 
@@ -40,7 +40,7 @@ module Webpacker::Helper
   #  <%= image_pack_tag 'application.png', size: '16x10', alt: 'Edit Entry' %>
   #  <img alt='Edit Entry' src='/packs/application-k344a6d59eef8632c9d1.png' width='16' height='10' />
   def image_pack_tag(name, **options)
-    image_tag(asset_path(Webpacker.manifest.lookup!(name)), **options)
+    image_tag(asset_path(current_webpacker_instance.class.manifest.lookup!(name)), **options)
   end
 
   # Creates a script tag that references the named pack file, as compiled by webpack per the entries list
@@ -83,7 +83,7 @@ module Webpacker::Helper
     end
 
     def sources_from_pack_manifest(names, type:)
-      names.map { |name| Webpacker.manifest.lookup!(pack_name_with_extension(name, type: type)) }
+      names.map { |name| current_webpacker_instance.class.manifest.lookup!(pack_name_with_extension(name, type: type)) }
     end
 
     def pack_name_with_extension(name, type:)
